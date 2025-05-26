@@ -2,11 +2,5 @@
     "version": 2,
     "env": {
       "NODE_VERSION": "20.x"
-    },
-    "crons": [
-      {
-        "path": "/api/story/worker",
-        "schedule": "*/15 * * * *"
-      }
-    ]
+    }
   }
