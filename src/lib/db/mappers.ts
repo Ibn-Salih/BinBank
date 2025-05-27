@@ -30,6 +30,8 @@ export function mapTelegramMessageToEntryInputData(msg: TelegramMessage): FullEn
         : `${msg.message.chat.type}_${msg.message.chat.username}`;
     
     const rawVideo = msg.message.video;
+    const photos = msg.message.photo ? (Array.isArray(msg.message.photo) ? msg.message.photo : [msg.message.photo]) : [];
+    const videos = rawVideo ? (Array.isArray(rawVideo) ? rawVideo : [rawVideo]) : [];
 
     return {
         entry: {
@@ -60,23 +62,13 @@ export function mapTelegramMessageToEntryInputData(msg: TelegramMessage): FullEn
             length: entity.length,
             type: entity.type,
         })) || [],
-        photos: msg.message.photo
-            ? Array.isArray(msg.message.photo)
-            ? msg.message.photo.map(photo => ({
-                fileId: photo.file_id,
-                fileUniqueId: photo.file_unique_id,
-                fileSize: photo.file_size,
-                width: photo.width,
-                height: photo.height,
-                }))
-            : [{
-                fileId: msg.message.photo.file_id,
-                fileUniqueId: msg.message.photo.file_unique_id,
-                fileSize: msg.message.photo.file_size,
-                width: msg.message.photo.width,
-                height: msg.message.photo.height,
-                }]
-            : [],
+        photos: photos.map(photo => ({
+            fileId: photo.file_id,
+            fileUniqueId: photo.file_unique_id,
+            fileSize: photo.file_size,
+            width: photo.width,
+            height: photo.height,
+        })),
         voice: msg.message.voice
             ? {
                 fileId: msg.message.voice.file_id,
@@ -86,27 +78,15 @@ export function mapTelegramMessageToEntryInputData(msg: TelegramMessage): FullEn
                 mimeType: msg.message.voice.mime_type,
             }
             : undefined,
-        videos: rawVideo
-            ? Array.isArray(rawVideo)
-            ? rawVideo.map(video => ({
-                duration: video.duration,
-                width: video.width,
-                height: video.height,
-                mimeType: video.mime_type,
-                fileId: video.file_id,
-                fileUniqueId: video.file_unique_id,
-                fileSize: video.file_size,
-                }))
-            : [{
-                duration: rawVideo.duration,
-                width: rawVideo.width,
-                height: rawVideo.height,
-                mimeType: rawVideo.mime_type,
-                fileId: rawVideo.file_id,
-                fileUniqueId: rawVideo.file_unique_id,
-                fileSize: rawVideo.file_size,
-                }]
-            : [], 
+        videos: videos.map(video => ({
+            duration: video.duration,
+            width: video.width,
+            height: video.height,
+            mimeType: video.mime_type,
+            fileId: video.file_id,
+            fileUniqueId: video.file_unique_id,
+            fileSize: video.file_size,
+        })),
         videoNote: msg.message.video_note
             ? {
                 fileId: msg.message.video_note.file_id,
@@ -116,7 +96,7 @@ export function mapTelegramMessageToEntryInputData(msg: TelegramMessage): FullEn
                 length: msg.message.video_note.length,
             }
             : undefined,
-    }
+    };
 }
   
 function mapEntryNode(node: Node): EntryNode {
