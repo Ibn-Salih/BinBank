@@ -77,17 +77,21 @@ export interface TelegramMessage {
       length: number;
       type: 'mention' | 'hashtag' | 'bot_command' | 'url' | 'email' | 'phone_number' | 'bold' | 'italic' | 'code' | 'pre' | 'text_link' | 'text_mention';
     }>;
-    caption?: string; // Caption for photos or other media
-    reply_to_message?: TelegramMessage['message']; // Allow for replying to other messges
-    photo?: TelegramPhoto | TelegramPhoto[];
+    caption?: string;
+    reply_to_message?: TelegramMessage['message'];
+    photo?: TelegramPhoto[];
+    location?: {
+      latitude: number;
+      longitude: number;
+    };
     voice?: {
       duration: number;
       mime_type: string;
       file_id: string;
       file_unique_id: string;
       file_size: number;
-    }; // Voice message properties
-    video?: TelegramVideo | TelegramVideo[]; // Video message properties
+    };
+    video?: TelegramVideo | TelegramVideo[];
     video_note?: {
       duration: number;
       length: number;
@@ -108,7 +112,7 @@ export interface TelegramMessage {
       file_id: string;
       file_unique_id: string;
       file_size: number;
-    }; // Video note (voice note but video) properties
+    };
     forum_topic_created?: {
       name: string;
       icon_color: number;
